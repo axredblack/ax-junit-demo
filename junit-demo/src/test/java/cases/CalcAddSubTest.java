@@ -14,12 +14,22 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.stubbing.OngoingStubbing;
 
 import main.Calc;
+import main.CalcService;
 
 @RunWith(Parameterized.class)
 public class CalcAddSubTest {
-
+	
+	@Mock
+	private CalcService cserviceMock;
+	
+	@InjectMocks
 	private Calc calc;
 	
 	@Parameter(0)
@@ -40,6 +50,7 @@ public class CalcAddSubTest {
 	@Before
 	public void setUp() throws Exception {
 		calc=new Calc();
+		 MockitoAnnotations.initMocks(this);
 	}
 
 	@After
@@ -48,12 +59,14 @@ public class CalcAddSubTest {
 
 	@Test	
 	public void testAdd() {
-
+		
+		OngoingStubbing<Integer> stub = Mockito.when(cserviceMock.add(x,y)).thenReturn(add);
 	    assertEquals(add, calc.add(x, y));
 	}
 
 	@Test
 	public void testSubtract() {
+		OngoingStubbing<Integer> stub = Mockito.when(cserviceMock.subtract(x,y)).thenReturn(subtract);
 		assertThat(subtract, is(calc.subtract(x, y)));
 	}
 
